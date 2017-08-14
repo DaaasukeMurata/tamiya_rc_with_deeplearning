@@ -1,0 +1,27 @@
+<launch>
+    <machine name="host" address="localhost" />
+
+    <node machine="host" pkg="rosserial_python" type="serial_node.py" name="serial_node">
+      <param name="port" value="/dev/ttyACM0"/>
+    </node>
+
+    <node machine="host" pkg="usb_cam" type="usb_cam_node" name="usb_cam_node">
+      <param name="image_width" value="1280"/>
+      <param name="framerate" value="30"/>
+      <param name="pixel_format" value="mjpeg"/>
+    </node>
+
+    <node machine="host" pkg="rc_image_w_tf" type="rc_line_detect.py" name="rc_line_detect" output="screen">
+      <param name="image" value="/usb_cam_node/image_raw" type="String"/>
+	    <param name="gui" value="false" type="bool"/>
+	    <param name="dim" value="2" type="int"/>
+	    <param name="thinning" value="4" type="int"/>
+    </node>
+
+    <node machine="host" pkg="rc_image_w_tf" type="image2steer.py" name="image2steer" output="screen">
+      <param name="model_name" value="model_v2_normal_w_line" type="String"/>
+	    <param name="use_line_trace" value="true" type="bool"/>
+      <param name="line_adjust_steer" value="50" type="int"/>
+    </node>
+    
+</launch>

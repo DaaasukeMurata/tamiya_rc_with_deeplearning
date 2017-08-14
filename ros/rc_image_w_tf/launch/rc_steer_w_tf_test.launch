@@ -1,0 +1,17 @@
+<launch>
+    <machine name="host" address="localhost" />
+
+    <node machine="host" pkg="rc_image_w_tf" type="rc_line_detect.py" name="rc_line_detect" output="screen">
+        <param name="image" value="/usb_cam_node/image_raw" type="String"/>
+	    <param name="gui" value="false" type="bool"/>
+	    <param name="dim" value="2" type="int"/>
+	    <param name="thinning" value="4" type="int"/>
+    </node>
+
+    <node machine="host" pkg="rc_image_w_tf" type="image2steer.py" name="image2steer" output="screen">
+        <param name="model_name" value="model_v2_normal_w_line" type="String"/>
+	    <param name="use_line_trace" value="true" type="bool"/>
+        <param name="line_adjust_steer" value="50" type="int"/>
+	    <param name="testmode" value="true" type="bool"/>
+    </node>
+</launch>
