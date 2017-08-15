@@ -1,7 +1,7 @@
 
 ![All System image](https://raw.githubusercontent.com/DaaasukeMurata/rc_w_dl/images/all_system.jpg)
 
-結果 : コーナーは曲がるが、直線ですぐ壁にぶつかる。[（走行Movie）](https://drive.google.com/open?id=0B0mNEspU9cAiS2N3SVBUQlBHNjQ)
+結果 : コーナーは曲がるが、直線ですぐ壁にぶつかる。[（走行Movie）](https://drive.google.com/open?id=0B0mNEspU9cAiS2N3SVBUQlBHNjQ)
 
 
 <!-- TOC -->
@@ -9,13 +9,13 @@
 - [動作環境](#動作環境)
 - [流れ](#流れ)
 - [1. データ取得](#1-データ取得)
-- [2. 学習用データに加工](#2-学習用データに加工)
+- [2. 学習用データに加工](#2-学習用データに加工)
     - [カメラ画像の加工パラメータ調整（ros/rc_image_w_tf/scripts/image_process/）](#カメラ画像の加工パラメータ調整rosrc_image_w_tfscriptsimage_process)
-    - [学習データの作成（create_testdata）](#学習データの作成create_testdata)
+    - [学習データの作成（create_testdata）](#学習データの作成create_testdata)
 - [3. TensorFlowで学習（learning/）](#3-tensorflowで学習learning)
     - [Training](#training)
     - [Result](#result)
-- [4. ラジコン制御（ros/rc_image_w_tf/）](#4-ラジコン制御rosrc_image_w_tf)
+- [4. ラジコン制御（ros/rc_image_w_tf/）](#4-ラジコン制御rosrc_image_w_tf)
 
 <!-- /TOC -->
 
@@ -30,22 +30,22 @@
 
 # 流れ
 
-1. ラジコンを操作して、カメラ画像とステアリングのデータ（ROS LOG）取得
+1. ラジコンを操作して、カメラ画像とステアリングのデータ（ROS LOG）取得
 
 2. CNN学習用のテストデータに加工
 
-3. TensorFlowで学習
+3. TensorFlowで学習
 
-4. 学習済みモデルを使用して、ラジコンのカメラ画像からステアリング値取得 -> ラジコン制御
+4. 学習済みモデルを使用して、ラジコンのカメラ画像からステアリング値取得 -> ラジコン制御
 
 
 # 1. データ取得
 
-カメラを取り付けたラジコンを、手動で操作。カメラ映像・ステアリング値のLOG取得。
+カメラを取り付けたラジコンを、手動で操作。カメラ映像・ステアリング値のLOG取得。
 
 ![course img](https://raw.githubusercontent.com/DaaasukeMurata/rc_w_dl/images/course.jpg)
 
-# 2. 学習用データに加工
+# 2. 学習用データに加工
 
 ## カメラ画像の加工パラメータ調整（ros/rc_image_w_tf/scripts/image_process/）
 
@@ -55,44 +55,44 @@
 $ rosrun rc_image_w_tf rc_line_detect.py _image:="/usb_cam_node/image_raw" _gui:=True
 ```
 
-調整用のwindowが立ち上がる。映像を見ながら調整。
+調整用のwindowが立ち上がる。映像を見ながら調整。
 
 ![GUI Tool img](https://raw.githubusercontent.com/DaaasukeMurata/rc_w_dl/images/img_process.jpg)
 
 | Category      | Parameter     | Description      |
 |:--------------|:--------------|:-----------------|
-| System        | pre_resize    | 入力画像の解像度削減。画像処理の低減に使用 |
-|               | thining       | frameの間引き。処理が追いつかない場合に使用 |
+| System        | pre_resize    | 入力画像の解像度削減。画像処理の低減に使用 |
+|               | thining       | frameの間引き。処理が追いつかない場合に使用 |
 |               | color_filter  | 色抽出フィルタ |
-|               | to_gray       | モノクロに変換 |
+|               | to_gray       | モノクロに変換 |
 |               | blur          | ぼかし |
 |               | detect_edge   | 輪郭検出 |
 |               | image_mask    | 直線検出に用いる画像マスク |
 |               | detect_line   | 直線検出 |
-|               | final_resize  | 出力画像の解像度削減。学習処理の低減に使用 |
+|               | final_resize  | 出力画像の解像度削減。学習処理の低減に使用 |
 |               | mono_output   | monoで画像出力　|
-| color         | -             | 色抽出フィルタの上限下限 |
+| color         | -             | 色抽出フィルタの上限下限 |
 | blur          | -             | ガウシアンフィルタのフィルタサイズ |
 | edge          | canny         | Canny Edge Detectとそのパラメータ |
 |               | findContours  | 輪郭検出。edgeを太くすのに使用 |
 | houghline     | -             | HoughLinesPのパラメータ |
-| extrapolation_lines| -        | 白線と認識する角度の範囲 |
+| extrapolation_lines| -        | 白線と認識する角度の範囲 |
 
-決めたパラメータは、ros/rc_image_w_tf/scripts/param_server.pyに値設定。
+決めたパラメータは、ros/rc_image_w_tf/scripts/param_server.pyに値設定。
 
-## 学習データの作成（create_testdata）
+## 学習データの作成（create_testdata）
 
 ```
 $ ./create_learn_data.sh [in_directory or xxx.bag] [outdir]
 ```
 
-上で決めたパラメータで映像加工、ステアリング値と一緒にしてbinary array(npyファイル）に格納。
+上で決めたパラメータで映像加工、ステアリング値と一緒にしてbinary array（npyファイル）に格納。
 
 映像frame毎に、
 
 - 加工後の画像
 - ステアリング値
-- サーボ値（使用しない）
+- サーボ値（今回使用しない）
 - 検出した白線の位置
 
 を格納。
@@ -101,7 +101,7 @@ $ ./create_learn_data.sh [in_directory or xxx.bag] [outdir]
 
 複数npyデータの結合
 ```
-$ python concat_train_data.py [in_directory_path] [out.npy]
+$ python concat_train_data.py [in_directory_path] [out.npy]
 ```
 
 npyデータのsummery表示
@@ -150,12 +150,12 @@ $ python learning.py
 
 - Train Param : AdamOptimizer、学習率0.001、mini batch 64 data/batch、dropout 0.5
 
-- Model : 下記3パターン試したが、ラジコンの挙動はあまり変わらず
+- Model : 下記3パターン試したが、ラジコンの挙動はあまり変わらず
     - 加工後の画像のみ
     - 加工後の画像 + 検出した白線の画像
     - 加工後の画像 + 検出した白線の画像 + 検出した白線の位置（座標）  
 
-    3つめのModelは下図。"input"が画像データ、"input_line_meta"が白線位置（座標）。
+    3つめのModelは下図。"input"が画像データ、"input_line_meta"が白線位置（座標）。
 
     加工後の画像と、検出した白線の画像はtf.nn.separable_conv2d[(Qiita解説記事)](http://qiita.com/YusukeSuzuki@github/items/0764d15b9d0b97ec1e16)を使い、画像ごとに重みが設定されるようにした。
 
@@ -167,12 +167,12 @@ $ python learning.py
 
 学習に使ったデータとは別に、正誤判定用データでの結果がaccuracy。
 
-開始早々に収束。一応全データ入力したが、サンプル数はこんなにいらんかも。
+開始早々に収束。一応全データ入力したが、サンプル数はこんなにいらんかも。
 
 ![tf result img](https://raw.githubusercontent.com/DaaasukeMurata/rc_w_dl/images/tensorboard_result_v3.png)
 
 
-# 4. ラジコン制御（ros/rc_image_w_tf/）
+# 4. ラジコン制御（ros/rc_image_w_tf/）
 
 ```
 $ roslaunch rc_image_w_tf rc_steer_w_tf.launch
@@ -184,6 +184,6 @@ $ roslaunch rc_image_w_tf rc_steer_w_tf.launch
 
 [走行Movie]
 
-コーナーは曲がるが、直線ですぐ壁にぶつかる。
+コーナーは曲がるが、直線ですぐ壁にぶつかる。
 
 [Movie(GoogleDrive)](https://drive.google.com/open?id=0B0mNEspU9cAiS2N3SVBUQlBHNjQ)
