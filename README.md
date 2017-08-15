@@ -12,7 +12,7 @@
 - [2. 学習用データに加工](#2-学習用データに加工)
     - [カメラ画像の加工パラメータ調整（ros/rc_image_w_tf/scripts/image_process/）](#カメラ画像の加工パラメータ調整rosrc_image_w_tfscriptsimage_process)
     - [学習データの作成（create_testdata）](#学習データの作成create_testdata)
-- [3. TensorFlowで学習（learning/）](#3-tensorflowで学習learning)
+- [3. TensorFlowで学習（learning/）](#3-tensorflowで学習learning)
     - [Training](#training)
     - [Result](#result)
 - [4. ラジコン制御（ros/rc_image_w_tf/）](#4-ラジコン制御rosrc_image_w_tf)
@@ -22,8 +22,8 @@
 
 # 動作環境
 
-- Tensorflow 0.11.0
-- OpenCV 2.4.8
+- Tensorflow 0.11.0
+- OpenCV 2.4.8
 - ROS Indigo
 - Python 2.7
 - PyQt4
@@ -101,7 +101,7 @@ $ ./create_learn_data.sh [in_directory or xxx.bag] [outdir]
 
 複数npyデータの結合
 ```
-$ python concat_train_data.py [in_directory_path] [out.npy]
+$ python concat_train_data.py [in_directory_path] [out.npy]
 ```
 
 npyデータのsummery表示
@@ -138,7 +138,7 @@ speed:
 $ ython remove_straight_data.py [in.npy] [out.npy]
 ```
 
-# 3. TensorFlowで学習（learning/）
+# 3. TensorFlowで学習（learning/）
 
 ```
 $ python learning.py
