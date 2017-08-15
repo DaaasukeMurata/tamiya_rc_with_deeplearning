@@ -24,7 +24,7 @@
 
 # 動作環境
 
-- Tensorflow 0.11.0
+- TensorFlow 0.11.0
 - OpenCV 2.4.8
 - ROS Indigo
 - Python 2.7
@@ -157,9 +157,9 @@ $ python learning.py
     - 加工後の画像 + 検出した白線の画像
     - 加工後の画像 + 検出した白線の画像 + 検出した白線の位置（座標）  
 
-    3つめのModelは下図。"input"が画像データ、"input_line_meta"が白線位置（座標）。
+    3つめのModelは下図。"input"が画像データ、"input_line_meta"が白線位置（座標）
 
-    加工後の画像と、検出した白線の画像はtf.nn.separable_conv2d[（解説記事 - Qiita）](http://qiita.com/YusukeSuzuki@github/items/0764d15b9d0b97ec1e16)を使い、画像ごとに重みが設定されるようにした。
+    加工後の画像と、検出した白線の画像はtf.nn.separable_conv2d[（解説記事 - Qiita）](http://qiita.com/YusukeSuzuki@github/items/0764d15b9d0b97ec1e16)を使い、画像ごとに重みが設定できるように。
 
     検出した白線位置 > 検出した白線の画像 > 加工後の画像 の順で判断してくれることを期待。
     
@@ -169,7 +169,7 @@ $ python learning.py
 
 学習に使ったデータとは別に、正誤判定用データでの結果がaccuracy。
 
-開始早々に収束。一応全データ入力したが、サンプル数はこんなにいらんかも。
+開始早々に収束。一応全データ入力したが、サンプル数は過剰と思われる。
 
 ![tf result img](https://raw.githubusercontent.com/DaaasukeMurata/rc_w_dl/images/tensorboard_result_v3.png)
 
@@ -180,11 +180,11 @@ $ python learning.py
 $ roslaunch rc_image_w_tf rc_steer_w_tf.launch
 ```
 
-- カメラの映像を、学習データ作成時に決めたParameterを用いてリアルタイムに変換、学習済みのModelでステアリング値を取得
+- カメラの映像を、学習データ作成時に決めたParameterを用いて、リアルタイムに変換。学習済みのModelでステアリング値を取得
 
 - 速度は一定
 
-[走行Movie]
+[走行結果]
 
 コーナーは曲がるが、直線ですぐ壁にぶつかる。
 
