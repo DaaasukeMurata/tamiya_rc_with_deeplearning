@@ -1,15 +1,17 @@
-
 ![All System image](https://raw.githubusercontent.com/DaaasukeMurata/rc_w_dl/images/all_system.jpg)
 
 結果 : コーナーは曲がるが、直線ですぐ壁にぶつかる。[（走行Movie）](https://drive.google.com/open?id=0B0mNEspU9cAiS2N3SVBUQlBHNjQ)
 
 
+# index
+
 <!-- TOC -->
 
+- [index](#index)
 - [動作環境](#動作環境)
 - [流れ](#流れ)
 - [1. データ取得](#1-データ取得)
-- [2. 学習用データに加工](#2-学習用データに加工)
+- [2. 学習用データへの加工](#2-学習用データへの加工)
     - [カメラ画像の加工パラメータ調整（ros/rc_image_w_tf/scripts/image_process/）](#カメラ画像の加工パラメータ調整rosrc_image_w_tfscriptsimage_process)
     - [学習データの作成（create_testdata）](#学習データの作成create_testdata)
 - [3. TensorFlowで学習（learning/）](#3-tensorflowで学習learning)
@@ -30,9 +32,9 @@
 
 # 流れ
 
-1. ラジコンを操作して、カメラ画像とステアリングのデータ（ROS LOG）取得
+1. ラジコンを操作して、カメラ画像とステアリングのデータ取得
 
-2. CNN学習用のテストデータに加工
+2. DeepLearning学習用のテストデータに加工
 
 3. TensorFlowで学習
 
@@ -45,7 +47,7 @@
 
 ![course img](https://raw.githubusercontent.com/DaaasukeMurata/rc_w_dl/images/course.jpg)
 
-# 2. 学習用データに加工
+# 2. 学習用データへの加工
 
 ## カメラ画像の加工パラメータ調整（ros/rc_image_w_tf/scripts/image_process/）
 
@@ -157,7 +159,7 @@ $ python learning.py
 
     3つめのModelは下図。"input"が画像データ、"input_line_meta"が白線位置（座標）。
 
-    加工後の画像と、検出した白線の画像はtf.nn.separable_conv2d[(Qiita解説記事)](http://qiita.com/YusukeSuzuki@github/items/0764d15b9d0b97ec1e16)を使い、画像ごとに重みが設定されるようにした。
+    加工後の画像と、検出した白線の画像はtf.nn.separable_conv2d[（解説記事 - Qiita）](http://qiita.com/YusukeSuzuki@github/items/0764d15b9d0b97ec1e16)を使い、画像ごとに重みが設定されるようにした。
 
     検出した白線位置 > 検出した白線の画像 > 加工後の画像 の順で判断してくれることを期待。
     
