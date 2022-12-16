@@ -1,6 +1,8 @@
 ![All System image](https://raw.githubusercontent.com/DaaasukeMurata/rc_w_dl/images/all_system.jpg)
 
-結果 : コーナーは曲がるが、直線ですぐ壁にぶつかる。[（走行Movie）](https://drive.google.com/open?id=0B0mNEspU9cAiS2N3SVBUQlBHNjQ)
+結果 : コーナーは曲がるが、直線ですぐ壁にぶつかる。
+
+https://user-images.githubusercontent.com/20267972/208101191-1c99229d-2b11-41cf-8137-62920cbeaa57.mp4
 
 
 # index
@@ -188,4 +190,4 @@ $ roslaunch rc_image_w_tf rc_steer_w_tf.launch
 
 コーナーは曲がるが、直線ですぐ壁にぶつかる。
 
-[Movie(GoogleDrive)](https://drive.google.com/open?id=0B0mNEspU9cAiS2N3SVBUQlBHNjQ)
+https://user-images.githubusercontent.com/20267972/208101191-1c99229d-2b11-41cf-8137-62920cbeaa57.mp4
